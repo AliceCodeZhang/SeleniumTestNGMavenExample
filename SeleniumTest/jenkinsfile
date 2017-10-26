@@ -1,0 +1,30 @@
+pipeline {
+   
+   agent{
+       label 'mac'
+   }
+   environment{
+       mvnHome = tool 'maven'
+   }
+   stages{
+   stage('Preparation') { // for display purposes
+      // Get some code from a GitHub repository
+      steps{
+      git 'https://github.com/AliceCodeZhang/androidSample.git'
+      }
+   }
+   stage('Build') {
+      // Run the maven build
+        steps{
+         sh "pwd ; cd ./SeleniumTest; '${mvnHome}/bin/mvn' -Dmaven.test.failure.ignore clean package"
+        } 
+      }
+   stage('Results') {
+      steps{
+        junit '**/target/surefire-reports/*.xml'
+        archive 'target/*.jar' 
+      }
+
+   }
+   }
+}
