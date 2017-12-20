@@ -9,7 +9,7 @@ pipeline {
       stage('Preparation') { // for display purposes
          // Get some code from a GitHub repository
          steps{
-         git 'https://github.com/AliceCodeZhang/androidSample.git'
+         git 'https://github.com/AliceCodeZhang/SeleniumTestNGMavenExample.git'
          }
       }
      stage('Build') {
@@ -23,6 +23,13 @@ pipeline {
           junit '**/target/surefire-reports/*.xml'
           archive 'target/*.jar' 
         }
+     post{
+       always {
+           //publish html
+           publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'SeleniumTest/target/surefire-reports', reportFiles: 'emailable-report.html', reportName: 'HTML Report', reportTitles: 'TestReport'])
+        }
+      }
      }
    }
+
 }
